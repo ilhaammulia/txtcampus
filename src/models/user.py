@@ -9,7 +9,7 @@ class User(BaseModel):
     name = db.Column(db.String(120), nullable=False)
     email_address = db.Column(db.String(120), unique=True, nullable=False)
     bio = db.Column(db.Text)
-    profile_photo = db.Column(db.String(200))
+    profile_photo = db.Column(db.String(200), default='public/images/profile-placeholder.png')
     role = db.Column(db.String(10), nullable=False, default='user')
 
     def set_password(self, password):
