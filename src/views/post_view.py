@@ -13,6 +13,18 @@ def get_posts():
     posts = PostService.get_all_posts(page, per_page)
     return jsonify({'success': True, 'message': None, 'data': {'posts': [post.json for post in posts.items], 'pagination': {'page': posts.page, 'per_page': posts.per_page, 'total_items': posts.total, 'total_pages': posts.pages}}})
 
+@post_blueprint.route('/search', methods=['GET'], endpoint='search')
+@auth_required
+def search():
+    page = int(request.args.get('page', 1) or 1)
+    per_page = int(request.args.get('per_page', 5) or 5)
+
+    query = request.args.get('search', '')
+    search_type = request.args.get('search_type', 'posts')
+
+    data = PostService.search(query, search_type, page, per_page)
+    return jsonify({'success': True, 'message': None, 'data': {'items': [item.json for item in data.items], 'pagination': {'page': data.page, 'per_page': data.per_page, 'total_items': data.total, 'total_pages': data.pages}}})
+
 @post_blueprint.route('/<string:uuid>', methods=['GET'], endpoint='get_post')
 @auth_required
 def get_post(uuid):

@@ -24,6 +24,10 @@ class UserRepository:
         return User.query.filter_by(username=username).first()
 
     @staticmethod
+    def search_users(username, page = 1, per_page = 5):
+        return User.query.filter(User.username.like(f'%{username}%')).paginate(page=page, per_page=per_page)
+
+    @staticmethod
     def get_user_by_email(email_address):
         return User.query.filter_by(email_address=email_address).first()
 

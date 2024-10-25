@@ -23,6 +23,10 @@ class PostRepository:
         return Post.query.filter_by(uuid=uuid).first()
 
     @staticmethod
+    def search_posts(query, page=1, per_page=5):
+        return Post.query.filter(Post.content.like(f'%{query}%')).filter_by(reply_to=None).order_by(Post.engagement_rate.desc(), Post.created_at.desc()).paginate(page=page, per_page=per_page)
+
+    @staticmethod
     def delete_post(post_id):
         post = Post.query.get(post_id)
         if post:

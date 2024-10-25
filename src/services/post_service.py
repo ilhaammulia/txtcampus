@@ -1,9 +1,16 @@
+from src.repositories.user_repository import UserRepository
 from src.repositories.post_repository import PostRepository
 from src.repositories.vote_repository import VoteRepository
 from src.repositories.bookmark_repository import BookmarkRepository
 from src.error import NotFoundError
 
 class PostService:
+
+    @staticmethod
+    def search(query, type, page=1, per_page=5):
+        if type == 'posts':
+            return PostRepository.search_posts(query, page, per_page)
+        return UserRepository.search_users(query, page, per_page)
 
     @staticmethod
     def create_post(user_id, content, is_anonym=False, reply_to=None):
