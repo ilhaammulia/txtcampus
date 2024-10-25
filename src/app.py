@@ -13,9 +13,9 @@ load_dotenv()
 
 def create_app():
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')  # Update this URI as needed
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER')  # Specify the upload folder path
+    app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER')
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
     db.init_app(app)
