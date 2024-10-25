@@ -61,6 +61,9 @@ class Post(BaseModel):
                 'replies': self.replies_count,
                 'bookmarks': self.bookmarks_count
             },
-            'reply_to': self.reply_to,
+            'reply_to': {
+                "uuid": self.parent_post.uuid,
+                "username": self.parent_post.username if not self.parent_post.is_anonym else None,
+            },
             'created_at':self.created_at
         }
