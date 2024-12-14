@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory, send_file
+from flask import Flask, Response, send_from_directory, send_file, request
 from src.database import db
 from src.error.error_handler import handle_not_found, handle_internal_error, handle_bad_request, handle_forbidden_error, handle_unauthorized_error
 from src.error import NotFoundError, InternalServerError, BadRequestError, ForbiddenError, UnauthorizedError
@@ -18,7 +18,12 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER')
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
-    CORS(app)
+    CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
+
+    @app.before_request
+    def handle_ok():
+        if request.method == "OPTIONS":
+            return Response()
 
     db.init_app(app)
 
