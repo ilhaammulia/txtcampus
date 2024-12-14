@@ -3,6 +3,7 @@ from src.database import db
 from src.error.error_handler import handle_not_found, handle_internal_error, handle_bad_request, handle_forbidden_error, handle_unauthorized_error
 from src.error import NotFoundError, InternalServerError, BadRequestError, ForbiddenError, UnauthorizedError
 from dotenv import load_dotenv
+from flask_cors import CORS
 import os
 
 from src.views.auth_view import auth_blueprint
@@ -17,6 +18,7 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER')
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+    CORS(app)
 
     db.init_app(app)
 
