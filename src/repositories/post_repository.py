@@ -16,7 +16,7 @@ class PostRepository:
 
     @staticmethod
     def get_all_replies(uuid, page=1, per_page=5):
-        return Post.query.filter_by(reply_to=uuid).order_by(Post.engagement_rate.desc(), Post.created_at.desc()).paginate(page=page, per_page=per_page)
+        return Post.query.filter_by(reply_to=uuid).order_by(Post.is_responded.desc(), Post.engagement_rate.desc(), Post.created_at.desc()).paginate(page=page, per_page=per_page)
 
     @staticmethod
     def get_post_by_uuid(uuid):
