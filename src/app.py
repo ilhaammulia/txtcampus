@@ -10,6 +10,9 @@ from src.views.auth_view import auth_blueprint
 from src.views.user_view import user_blueprint
 from src.views.post_view import post_blueprint
 
+from src.database.seeds import create_admin
+
+
 load_dotenv()
 
 def create_app():
@@ -47,5 +50,7 @@ def create_app():
 
     with app.app_context():
         db.create_all()
+
+        create_admin()
 
     return app
