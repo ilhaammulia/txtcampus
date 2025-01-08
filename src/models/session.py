@@ -30,7 +30,7 @@ class Session(BaseModel):
     @property
     def json(self):
         return {
-            'user': self.user.json,
+            'user': {**self.user.json, 'email_address': self.user.email_address },
             'token': self.token,
             'expired_at': self.expired_at
         }

@@ -20,7 +20,3 @@ class BookmarkRepository:
     @staticmethod
     def get_bookmark(user_id, post_id):
         return Bookmark.query.filter_by(user_id=user_id, post_id=post_id).first()
-
-    @staticmethod
-    def get_bookmarks_by_user(user_id):
-        return Bookmark.query.filter_by(user_id=user_id).all()

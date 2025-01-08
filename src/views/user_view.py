@@ -12,6 +12,7 @@ def update_profile():
     email_address = data.get('email_address')
     name = data.get('name')
     bio = data.get('bio')
+    password = data.get('password')
 
     # Handle profile photo upload
     profile_photo = request.files.get('profile_photo')
@@ -19,13 +20,14 @@ def update_profile():
     user = UserService.update_user_profile(
         user_id=g.current_user.id,
         username=username,
+        password=password,
         email_address=email_address,
         name=name,
         bio=bio,
         profile_photo=profile_photo
     )
 
-    return jsonify({'success': True, 'message': 'Profile updated successfully', 'data': user.username}), 200
+    return jsonify({'success': True, 'message': 'Profile updated successfully', 'data': {**user.json, 'email_address': user.email_address}}), 200
 
 @user_blueprint.route('/', methods=['GET'], endpoint='get_profile')
 @auth_required

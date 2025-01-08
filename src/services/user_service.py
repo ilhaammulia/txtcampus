@@ -12,7 +12,7 @@ class UserService:
         return UserRepository.get_user_by_username(username)
 
     @staticmethod
-    def update_user_profile(user_id, username=None, email_address=None, name=None, bio=None, profile_photo=None):
+    def update_user_profile(user_id, username=None, password=None, email_address=None, name=None, bio=None, profile_photo=None):
         user = UserRepository.get_user_by_id(user_id)
 
         if username and username != user.username:
@@ -25,6 +25,8 @@ class UserService:
 
         if username:
             user.username = username
+        if password:
+            user.set_password(password)
         if email_address:
             user.email_address = email_address
         if name:

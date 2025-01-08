@@ -1,4 +1,6 @@
 from src.models.post import Post
+from src.models.bookmark import Bookmark
+
 from src.app import db
 
 class PostRepository:
@@ -13,6 +15,14 @@ class PostRepository:
     @staticmethod
     def get_all_posts(page=1, per_page=5):
         return Post.query.filter_by(reply_to=None).order_by(Post.engagement_rate.desc(), Post.created_at.desc()).paginate(page=page, per_page=per_page)
+
+    @staticmethod
+    def get_all_posts_by_user(user_id, page=1, per_page=5):
+        return Post.query.filter_by(user_id=user_id, reply_to=None, is_anonym=False).order_by(Post.engagement_rate.desc(), Post.created_at.desc()).paginate(page=page, per_page=per_page)
+
+    @staticmethod
+    def get_all_bookmarks(user_id, page, per_page):
+        return Post.query.join(Bookmark).filter(Bookmark.user_id == user_id).order_by(Bookmark.created_at.desc()).paginate(page=page, per_page=per_page)
 
     @staticmethod
     def get_all_replies(uuid, page=1, per_page=5):

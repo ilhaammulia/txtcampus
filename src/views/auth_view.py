@@ -18,6 +18,9 @@ def register():
 @auth_blueprint.route('/login', methods=['POST'], endpoint='login_user')
 def login():
     data = request.get_json()
+    if 'identifier' not in data and 'password' not in data:
+        return jsonify({'success': False, 'message': 'Invalid username or email address, or password'}), 401
+
     session, user = AuthService.login_user(data['identifier'], data['password'])
     if session:
         return jsonify({'success': True, 'message': 'Login successful', 'data': session.json}), 200

@@ -1,6 +1,9 @@
+from pytz import lazy
 import uuid
 from datetime import datetime
 from src.models import BaseModel
+from src.models.vote import Vote
+from src.models.bookmark import Bookmark
 from src.database import db
 
 class Post(BaseModel):
@@ -17,6 +20,9 @@ class Post(BaseModel):
     engagement_rate = db.Column(db.Float, default=0.0)
     sentimen = db.Column(db.String(50), default="neutral")
     sentimen_score = db.Column(db.Float, default=0.0)
+
+    bookmarks = db.relationship('Bookmark', backref='post', lazy=True)
+    votes = db.relationship('Vote', backref='post', lazy=True)
 
     reply_to = db.Column(db.String(36), db.ForeignKey('post.uuid'), nullable=True)  # Self-reference to uuid
     parent_post = db.relationship('Post', remote_side=[uuid], backref='replies')
@@ -46,6 +52,9 @@ class Post(BaseModel):
             self.calculate_engagement()
         db.session.commit()
 
+    def response(self):
+        self.is_responded = True
+        db.session.commit()
 
     @property
     def json(self):
@@ -56,14 +65,14 @@ class Post(BaseModel):
             'is_anonym': self.is_anonym,
             'is_responded': self.is_responded,
             'stats': {
-                'upvotes': self.upvotes_count,
-                'downvotes': self.downvotes_count,
-                'replies': self.replies_count,
-                'bookmarks': self.bookmarks_count
+                'upvotes': len([vote.id for vote in self.votes if vote.vote == 1]),
+                'downvotes': len([vote.id for vote in self.votes if vote.vote == -1]),
+                'replies': len(self.replies),
+                'bookmarks': len(self.bookmarks),
             },
             'reply_to': {
                 "uuid": self.parent_post.uuid if self.parent_post else None,
-                "username": self.parent_post.username if self.parent_post and not self.parent_post.is_anonym else None,
+                "username": self.parent_post.user.username if self.parent_post and not self.parent_post.is_anonym else None,
             },
-            'created_at':self.created_at
+            'created_at': self.created_at,
         }

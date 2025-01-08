@@ -13,16 +13,26 @@ class PostService:
         return UserRepository.search_users(query, page, per_page)
 
     @staticmethod
-    def create_post(user_id, content, is_anonym=False, reply_to=None):
+    def create_post(user_id, content, is_anonym=False, reply_to=None, is_official=False):
         parent = PostRepository.get_post_by_uuid(reply_to)
         if reply_to and not parent:
             NotFoundError("Post not found")
-        if parent: parent.calculate_count(1, 'reply')
+        if parent and is_official:
+            parent.response()
+        if parent:
+            parent.calculate_count(1, 'reply')
         return PostRepository.create_post(user_id, content, is_anonym, reply_to)
 
     @staticmethod
     def get_all_posts(page=1, per_page=5):
         return PostRepository.get_all_posts(page, per_page)
+
+    @staticmethod
+    def get_all_posts_by_user(username, page=1, per_page=5):
+        user = UserRepository.get_user_by_username(username)
+        if not user:
+            NotFoundError("Post not found")
+        return PostRepository.get_all_posts_by_user(user.id, page, per_page)
 
     @staticmethod
     def get_all_replies(uuid, page=1, per_page=5):
@@ -71,3 +81,10 @@ class PostService:
             return BookmarkRepository.delete_bookmark(bookmark.id)
         post.calculate_count(1, 'bookmark')
         return BookmarkRepository.create_bookmark(user_id, post.id)
+
+    @staticmethod
+    def get_bookmarks(username, page=1, per_page=5):
+        user = UserRepository.get_user_by_username(username)
+        if not user:
+            NotFoundError("User not found")
+        return PostRepository.get_all_bookmarks(user.id, page, per_page)
