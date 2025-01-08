@@ -1,8 +1,11 @@
+from src.repositories.classification_repository import ClassificationRepository
 from src.repositories.user_repository import UserRepository
 from src.repositories.post_repository import PostRepository
 from src.repositories.vote_repository import VoteRepository
 from src.repositories.bookmark_repository import BookmarkRepository
 from src.error import NotFoundError
+
+classification = ClassificationRepository()
 
 class PostService:
 
@@ -21,7 +24,8 @@ class PostService:
             parent.response()
         if parent:
             parent.calculate_count(1, 'reply')
-        return PostRepository.create_post(user_id, content, is_anonym, reply_to)
+        sentiment, score = classification.predict(content)
+        return PostRepository.create_post(user_id, content, is_anonym, reply_to, sentiment, score)
 
     @staticmethod
     def get_all_posts(page=1, per_page=5):

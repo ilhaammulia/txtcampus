@@ -6,8 +6,8 @@ from src.app import db
 class PostRepository:
 
     @staticmethod
-    def create_post(user_id, content, is_anonym=False, reply_to=None):
-        new_post = Post(user_id=user_id, content=content, is_anonym=is_anonym, reply_to=reply_to)
+    def create_post(user_id, content, is_anonym=False, reply_to=None, sentimen='neutral', score=0):
+        new_post = Post(user_id=user_id, content=content, is_anonym=is_anonym, reply_to=reply_to, sentimen=sentimen, sentimen_score=score)
         db.session.add(new_post)
         db.session.commit()
         return new_post
