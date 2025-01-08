@@ -31,4 +31,5 @@ class User(BaseModel):
             'name': self.name,
             'bio': self.bio,
             'profile_photo': self.profile_photo,
+            'role': self.role,
         }
