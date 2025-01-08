@@ -19,6 +19,6 @@ def register():
 def login():
     data = request.get_json()
     session, user = AuthService.login_user(data['identifier'], data['password'])
-    if session and user:
-        return jsonify({'success': True, 'message': 'Login successful', 'data': {'session': session.json, 'user': user.json}}), 200
+    if session:
+        return jsonify({'success': True, 'message': 'Login successful', 'data': session.json}), 200
     return jsonify({'success': False, 'message': 'Invalid username or email address, or password'}), 401
