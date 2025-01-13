@@ -8,14 +8,14 @@ user_blueprint = Blueprint('user', __name__)
 @auth_required
 def update_profile():
     data = request.form
-    username = data.get('username')
-    email_address = data.get('email_address')
-    name = data.get('name')
-    bio = data.get('bio')
-    password = data.get('password')
+    username = data.get('username') or None
+    email_address = data.get('email_address') or None
+    name = data.get('name') or None
+    bio = data.get('bio') or None
+    password = data.get('password') or None
 
     # Handle profile photo upload
-    profile_photo = request.files.get('profile_photo')
+    profile_photo = request.files.get('profile_photo') or None
 
     user = UserService.update_user_profile(
         user_id=g.current_user.id,

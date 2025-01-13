@@ -23,15 +23,16 @@ class UserService:
             if UserRepository.get_user_by_email(email_address):
                 raise BadRequestError("Email address is already in use")
 
-        if username != None or username != "":
+        if username not in [None, "", "null"]:
             user.username = username
-        if password != None or password != "":
+        if password not in [None, "", "null"]:
+            print("password:", password)
             user.set_password(password)
-        if email_address != None or email_address != "":
+        if email_address not in [None, "", "null"]:
             user.email_address = email_address
-        if name != None or name != "":
+        if name not in [None, "", "null"]:
             user.name = name
-        if bio != None or bio != "":
+        if bio not in [None, "", "null"]:
             user.bio = bio
 
         if profile_photo:
